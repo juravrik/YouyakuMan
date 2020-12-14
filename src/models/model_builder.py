@@ -42,8 +42,9 @@ class Bert(nn.Module):
         self.model = BertModel.from_pretrained(bert_model)
 
     def forward(self, x, segs, mask):
-        top_vec, _ = self.model(x, token_type_ids=segs, attention_mask=mask)
-        return top_vec
+        #top_vec, _ = self.model(x, token_type_ids=segs, attention_mask=mask)
+        result = self.model(x, token_type_ids=segs, attention_mask=mask)
+        return result[0]
 
 
 class Summarizer(nn.Module):
@@ -72,6 +73,7 @@ class Summarizer(nn.Module):
     def forward(self, x, segs, clss, mask, mask_cls, sentence_range=None):
 
         top_vec = self.bert(x, segs, mask)
+        
         sents_vec = top_vec[torch.arange(top_vec.size(0)).unsqueeze(1), clss]
         sents_vec = sents_vec * mask_cls[:, :, None].float()
         sent_scores = self.encoder(sents_vec, mask_cls).squeeze(-1)

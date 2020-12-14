@@ -1,6 +1,6 @@
 import re
 
-from pyknp import Juman
+#from pyknp import Juman
 from sumeval.metrics.rouge import RougeCalculator
 from configparser import ConfigParser
 from transformers import BertTokenizer
@@ -8,7 +8,7 @@ from transformers import BertTokenizer
 config = ConfigParser()
 config.read('config.ini')
 
-
+"""
 class JumanTokenizer:
     def __init__(self):
         self.juman = Juman(command=config['Juman']['command'],
@@ -17,7 +17,7 @@ class JumanTokenizer:
     def __call__(self, text):
         result = self.juman.analysis(text)
         return [mrph.midasi for mrph in result.mrph_list()]
-
+"""
 
 class RougeNCalc:
     def __init__(self):
@@ -30,9 +30,9 @@ class RougeNCalc:
 
 class Preprocess:
     def __init__(self):
-        self.juman_tokenizer = JumanTokenizer()
+        #self.juman_tokenizer = JumanTokenizer()
         self.rouge_calculator = RougeNCalc()
-        self.bert_tokenizer = BertTokenizer(config['DEFAULT']['vocab_path'],
+        self.bert_tokenizer = BertTokenizer.from_pretrained("./model/Japanese/",
                                             do_lower_case=False, do_basic_tokenize=False)
         self.trim_input = 0
         self.trim_clss = 0
@@ -96,8 +96,8 @@ class Preprocess:
             return text.replace(" ", "")  # for Juman
         for sentence in self.src_line:
             preprocessed_text = _preprocess_text(sentence)
-            juman_tokens = self.juman_tokenizer(preprocessed_text)
-            tokens = self.bert_tokenizer.tokenize(" ".join(juman_tokens))
+            #juman_tokens = self.juman_tokenizer(preprocessed_text)
+            tokens = self.bert_tokenizer.tokenize(preprocessed_text)
             tokens = ["[CLS]"] + tokens + ["[SEP]"]
             ids = self.bert_tokenizer.convert_tokens_to_ids(tokens)
             self.token += tokens
