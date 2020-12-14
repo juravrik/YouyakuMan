@@ -1,12 +1,12 @@
 import re
-from pyknp import Juman
+#from pyknp import Juman
 from configparser import ConfigParser
 from transformers import BertTokenizer
 
 config = ConfigParser()
 config.read('./config.ini')
 
-
+"""
 class JumanTokenizer:
     def __init__(self):
         self.juman = Juman(command=config['Juman']['command'],
@@ -15,7 +15,7 @@ class JumanTokenizer:
     def __call__(self, text):
         result = self.juman.analysis(text)
         return [mrph.midasi for mrph in result.mrph_list()]
-
+"""
 
 class LangFactory:
     def __init__(self, lang):
@@ -38,7 +38,7 @@ class LangFactory:
 
 class JapaneseWorker:
     def __init__(self):
-        self.juman_tokenizer = JumanTokenizer()
+        #self.juman_tokenizer = JumanTokenizer()
         self.bert_tokenizer = BertTokenizer(config['DEFAULT']['vocab_path'],
                                             do_basic_tokenize=False)
         self.cls_id = self.bert_tokenizer.vocab['[CLS]']
@@ -88,8 +88,9 @@ class JapaneseWorker:
 
         for sentence in src:
             preprocessed_text = _preprocess_text(sentence)
-            juman_tokens = self.juman_tokenizer(preprocessed_text)
-            tokens = self.bert_tokenizer.tokenize(" ".join(juman_tokens))
+            #juman_tokens = self.juman_tokenizer(preprocessed_text)
+            #tokens = self.bert_tokenizer.tokenize(" ".join(juman_tokens))
+            tokens = self.bert_tokenizer.tokenize(preprocessed_text)
             tokens = ["[CLS]"] + tokens + ["[SEP]"]
             ids = self.bert_tokenizer.convert_tokens_to_ids(tokens)
             token += tokens
