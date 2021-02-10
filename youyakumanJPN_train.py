@@ -53,7 +53,7 @@ if __name__ == '__main__':
     def train_loader_fct():
         return TrainLoader(args.data_folder, 512, args.batch_size, device=device, shuffle=True)
 
-    model = Summarizer(args, './model/Japanese/', device, train=True)
+    model = Summarizer(args, 'cl-tohoku/bert-base-japanese-whole-word-masking', device, train=True)
     if args.train_from != '':
         print('Loading checkpoint from %s' % args.train_from)
         checkpoint = torch.load(args.train_from,

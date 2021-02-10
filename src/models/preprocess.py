@@ -32,7 +32,7 @@ class Preprocess:
     def __init__(self):
         #self.juman_tokenizer = JumanTokenizer()
         self.rouge_calculator = RougeNCalc()
-        self.bert_tokenizer = BertTokenizer.from_pretrained("./model/Japanese/",
+        self.bert_tokenizer = BertTokenizer.from_pretrained("cl-tohoku/bert-base-japanese-whole-word-masking",
                                             do_lower_case=False, do_basic_tokenize=False)
         self.trim_input = 0
         self.trim_clss = 0
